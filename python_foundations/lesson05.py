@@ -3,7 +3,6 @@ separate the decision-making logic from the presentation logic.
 """
 from calculations import calculate_utilization
 
-
 def main():
     sites = [
         {
@@ -48,8 +47,6 @@ def main():
         print(f"Site: {site['site_name']}")
         print(f"Utilization: {utilization:.2f}%")
         print(f"Status: {status}\n")
-
-    return
 
 if __name__ == "__main__":
     main()
