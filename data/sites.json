@@ -1,0 +1,28 @@
+
+[
+    {
+    "site_name": "OULU_BTS_001",
+    "connected_users": 150,
+    "maximum_users": 250,
+    "is_online": true
+    },
+    {
+    "site_name": "OULU_BTS_002",
+    "connected_users": 225,
+    "maximum_users": 250,
+    "is_online": true
+    },
+    {
+    "site_name": "OULU_BTS_003",
+    "connected_users": 200,
+    "maximum_users": 250,
+    "is_online": false
+    },
+    {
+    "site_name": "OULU_BTS_004",
+    "connected_users": -10,
+    "maximum_users": 250,
+    "is_online": true
+    }
+]
+
