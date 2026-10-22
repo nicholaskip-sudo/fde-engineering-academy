@@ -1,0 +1,33 @@
+name: Python Tests
+
+# on is an event listener. 
+# trigger the workflow on push and pull requests.
+on: 
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+#jobs is collection of tasks
+# test - defines a job named test, contains runs-on and steps.
+# runs-on: ubuntu-latest  run on github hosted linux virtual machine.
+# steps to take to execute. uses keyword invokes a reusable Github action, run keyword executes a shell command.
+jobs: 
+
+  test: 
+    runs-on: ubuntu-latest 
+
+    steps: 
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install Dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run the complete test suite
+        run: python -m pytest -v
