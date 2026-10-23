@@ -30,6 +30,7 @@ def test_successful_monitoring(tmp_path,capsys):
     file_path.write_text(json.dumps(sites), encoding="utf-8")
     main(file_path)
     captured= capsys.readouterr()
+    output_lines = [" ".join(line.split()) for line in captured.out.splitlines()]
 
     assert "OULU_BTS_001" in captured.out
     assert "OULU_BTS_002" in captured.out
@@ -37,10 +38,8 @@ def test_successful_monitoring(tmp_path,capsys):
     assert "90.00" in captured.out
     assert "NORMAL" in captured.out
     assert "WARNING" in captured.out
-    assert "INVALID" not in captured.out
-    assert "VALID RECORD:       2" in captured.out
-    assert "Invalid count:      0" in captured.out
-
+    assert "VALID RECORDS: 2" in output_lines
+    assert "INVALID RECORDS: 0" in output_lines
 
 def test_mixed_valid_invalid_records(tmp_path,capsys):
     file_path = tmp_path / "mixed_valid_invalid.json"
@@ -85,12 +84,10 @@ def test_mixed_valid_invalid_records(tmp_path,capsys):
     assert "NORMAL" in captured.out
     assert "WARNING" in captured.out
     assert "CRITICAL" in captured.out
-    assert "Invalid" in captured.out
-    assert "Invalid record : ERROR: Connected users cannot be less than zero" in captured.out
     assert "TOTAL RECORD: 4" in output_lines
-    assert "VALID RECORD: 3" in output_lines
-    assert "Invalid count: 1" in output_lines
-    assert "Normal count: 1" in output_lines
-    assert "Warning count: 1" in output_lines
-    assert "Critical count: 1" in output_lines
+    assert "VALID RECORDS: 3" in output_lines
+    assert "INVALID RECORDS: 1" in output_lines
+    assert "NORMAL RECORDS: 1" in output_lines
+    assert "WARNING RECORDS: 1" in output_lines
+    assert "CRITICAL RECORDS: 1" in output_lines
 

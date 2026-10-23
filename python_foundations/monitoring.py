@@ -4,7 +4,7 @@ regression testing during refactoring.
 dependency injection
 """
 
-from python_foundations.processing import process_site
+from python_foundations.reporting import process_all_sites
 from python_foundations.lesson06 import load_sites
 from pathlib import Path
 
@@ -23,40 +23,20 @@ def main(json_path=None): # dependency injection
     if not isinstance(sites, list):
         raise ValueError("Input data must be a list of dictionaries")
 
-    normal_count = warning_count = critical_count = invalid_count = 0
+    results = process_all_sites(sites)
 
-    for site in sites:
-        try:
-            result = process_site(site)
-        except ValueError as error:
-            print(f"Invalid record : {error}")
-            invalid_count += 1
-            continue
-
-        if result["status"] == "NORMAL":
-            normal_count += 1
-        elif result["status"] == "WARNING":
-            warning_count += 1
-        elif result["status"] == "CRITICAL":
-            critical_count += 1
-        else:
-            raise ValueError(f"Unexpected operational status: {result['status']}")
-
+    for site in results['sites']:
         print("\n ---------PRINTING SITE DETAILS-------------")
-        print(f"Site name:                 {result['site_name']}")
-        print(f"Utilization:               {result['utilization']:.2f}%")
-        print(f"Operational status:        {result["status"]}\n")
+        print(f"Site name:            {site['site_name']}")
+        print(f"Utilization:          {site['utilization']:.2f}%")
+        print(f"Operational status:   {site["status"]}\n")
 
-    total_records = len(sites)
-    valid_records = normal_count + warning_count + critical_count
-
-    print("\n ---------COUNTERS SUMMARY-------------")
-    print(f"TOTAL RECORD:       {total_records}")
-    print(f"VALID RECORD:       {valid_records}\n")
-    print(f"Invalid count:      {invalid_count}")
-    print(f"Normal count:       {normal_count}")
-    print(f"Warning count:      {warning_count}")
-    print(f"Critical count:     {critical_count}")
+    print(f"TOTAL RECORD:          {results['total_records']}")
+    print(f"VALID RECORDS:         {results['valid_records']}")
+    print(f"INVALID RECORDS:       {results['invalid_records']}")
+    print(f"NORMAL RECORDS:        {results['normal_count']}")
+    print(f"WARNING RECORDS:       {results['warning_count']}")
+    print(f"CRITICAL RECORDS:      {results['critical_count']}")
 
 if __name__ == "__main__":
     main()
