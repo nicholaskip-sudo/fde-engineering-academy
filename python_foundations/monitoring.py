@@ -1,10 +1,14 @@
-from python_foundations.calculations import calculate_utilization
-from python_foundations.validation import validate_site
+"""
+separation of concerns.
+regression testing during refactoring.
+dependency injection
+"""
+
+from python_foundations.processing import process_site
 from python_foundations.lesson06 import load_sites
 from pathlib import Path
 
-
-def main(json_path=None):
+def main(json_path=None): # dependency injection
 
     if json_path is None:
         project_root = Path(__file__).resolve().parent.parent
@@ -21,35 +25,27 @@ def main(json_path=None):
 
     normal_count = warning_count = critical_count = invalid_count = 0
 
-    threshold = 80
-
     for site in sites:
         try:
-            validate_site(site)
+            result = process_site(site)
         except ValueError as error:
             print(f"Invalid record : {error}")
             invalid_count += 1
             continue
 
-        utilization = calculate_utilization(site["connected_users"],site["maximum_users"] )
-
-        if not site['is_online']:
-            critical_count += 1
-            status = "CRITICAL"
-        elif utilization >= threshold:
+        if result["status"] == "NORMAL":
+            normal_count += 1
+        elif result["status"] == "WARNING":
             warning_count += 1
-            status = "WARNING"
+        elif result["status"] == "CRITICAL":
+            critical_count += 1
         else:
-            normal_count +=1
-            status="NORMAL"
+            raise ValueError(f"Unexpected operational status: {result['status']}")
 
         print("\n ---------PRINTING SITE DETAILS-------------")
-        print(f"Site name:                 {site['site_name']}")
-        print(f"Connected users:           {site['connected_users']}")
-        print(f"Maximum users:             {site['maximum_users']}")
-        print(f"Site online status:        {site['is_online']}")
-        print(f"Utilization:               {utilization:.2f}%")
-        print(f"Operational status:        {status}\n")
+        print(f"Site name:                 {result['site_name']}")
+        print(f"Utilization:               {result['utilization']:.2f}%")
+        print(f"Operational status:        {result["status"]}\n")
 
     total_records = len(sites)
     valid_records = normal_count + warning_count + critical_count
@@ -61,7 +57,6 @@ def main(json_path=None):
     print(f"Normal count:       {normal_count}")
     print(f"Warning count:      {warning_count}")
     print(f"Critical count:     {critical_count}")
-
 
 if __name__ == "__main__":
     main()
