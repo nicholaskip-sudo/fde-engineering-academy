@@ -38,5 +38,16 @@ def main(json_path=None): # dependency injection
     print(f"WARNING RECORDS:       {results['warning_count']}")
     print(f"CRITICAL RECORDS:      {results['critical_count']}")
 
+    print("\n---------REJECTED RECORDS---------")
+
+    if results['errors']:
+        for error in results['errors']:
+            print(f"SITE NAME:          {error['site_name']}")
+            print(f"REASON:             {error['reason']}\n")
+    else:
+        print("No rejected records.")
+
+
+
 if __name__ == "__main__":
     main()
