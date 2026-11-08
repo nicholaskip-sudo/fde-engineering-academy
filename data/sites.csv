@@ -1,0 +1,5 @@
+site_name,connected_users,maximum_users,is_online
+OULU_BTS_001,150,250,True
+OULU_BTS_002,225,250,True
+OULU_BTS_003,200,250,False
+OULU_BTS_004,-10,250,True
